@@ -10,7 +10,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import spring.altarok.msscbeerservice.web.model.BeerDto;
+import spring.altarok.msscbeerservice.web.model.BeerStyleEnum;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -30,7 +32,13 @@ class BeerControllerTest {
 
     @BeforeEach
     void setUp() {
-        beerDto = BeerDto.builder().build();
+        beerDto = BeerDto.builder()
+                .beerName("BeerGarden")
+                .beerStyle(BeerStyleEnum.PALE_ALE)
+                .price(new BigDecimal("19.35"))
+                .quantityOnHand(15)
+                .upc(123456789123456L)
+                .build();
     }
 
     @Test

@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import spring.altarok.msscbeerservice.services.BeerService;
 import spring.altarok.msscbeerservice.web.model.BeerDto;
 
 import java.util.UUID;
@@ -12,10 +13,16 @@ import java.util.UUID;
 @RestController
 public class BeerController {
 
+    private final BeerService beerService;
+
+    public BeerController(BeerService beerService) {
+        this.beerService = beerService;
+    }
+
     @GetMapping("/{beerId}")
     public ResponseEntity<BeerDto> getBeerById(@PathVariable UUID beerId) {
-        //todo impl
-        return new ResponseEntity<>(BeerDto.builder().build(), HttpStatus.OK);
+        BeerDto returnedBeer = beerService.getBeerById(beerId);
+        return new ResponseEntity<>(returnedBeer, HttpStatus.OK);
     }
 
     @PostMapping

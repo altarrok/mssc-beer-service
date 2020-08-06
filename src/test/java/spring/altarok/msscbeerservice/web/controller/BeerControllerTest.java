@@ -15,6 +15,7 @@ import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.StringUtils;
+import spring.altarok.msscbeerservice.bootstrap.BeerLoader;
 import spring.altarok.msscbeerservice.services.BeerService;
 import spring.altarok.msscbeerservice.web.model.BeerDto;
 import spring.altarok.msscbeerservice.web.model.BeerStyleEnum;
@@ -56,7 +57,7 @@ class BeerControllerTest {
                 .beerStyle(BeerStyleEnum.PALE_ALE)
                 .price(new BigDecimal("19.35"))
                 .quantityOnHand(15)
-                .upc(123456789123456L)
+                .upc(BeerLoader.BEER_1_UPC)
                 .build();
     }
 
@@ -92,6 +93,8 @@ class BeerControllerTest {
 
         ConstrainedFields fields = new ConstrainedFields(BeerDto.class);
 
+        given(beerService.saveNewBeer(any(BeerDto.class))).willReturn(beerDto);
+
         mockMvc.perform(post("/api/v1/beer/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(beerDtoJson))
@@ -113,6 +116,8 @@ class BeerControllerTest {
     @Test
     void updateBeerById() throws Exception {
         String beerDtoJson = objectMapper.writeValueAsString(beerDto);
+
+        given(beerService.updateBeer(any(UUID.class), any(BeerDto.class))).willReturn(beerDto);
 
         mockMvc.perform(put("/api/v1/beer/" + UUID.randomUUID().toString())
                 .contentType(MediaType.APPLICATION_JSON)

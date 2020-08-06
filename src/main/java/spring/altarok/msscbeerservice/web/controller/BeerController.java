@@ -1,5 +1,6 @@
 package spring.altarok.msscbeerservice.web.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -9,15 +10,12 @@ import spring.altarok.msscbeerservice.web.model.BeerDto;
 
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/beer")
 @RestController
 public class BeerController {
 
     private final BeerService beerService;
-
-    public BeerController(BeerService beerService) {
-        this.beerService = beerService;
-    }
 
     @GetMapping("/{beerId}")
     public ResponseEntity<BeerDto> getBeerById(@PathVariable UUID beerId) {
@@ -26,15 +24,14 @@ public class BeerController {
     }
 
     @PostMapping
-    public ResponseEntity saveNewBeer(@RequestBody @Validated BeerDto beerDto) {
-        //todo impl
-        return new ResponseEntity(HttpStatus.CREATED);
+    public ResponseEntity<BeerDto> saveNewBeer(@RequestBody @Validated BeerDto beerDto) {
+        return new ResponseEntity<>(beerService.saveNewBeer(beerDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{beerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateBeerById(@PathVariable UUID beerId, @RequestBody @Validated BeerDto beerDto) {
-        //todo impl
+        beerService.updateBeer(beerId, beerDto);
     }
 
 }
